@@ -22,8 +22,8 @@ pipeline{
         stage ('Quality gate'){
             steps{
                 bat "echo ver aula de instalaçao do QUALITY GATE e configuração estática Pipeline 59"
-                }
             }
-        }               
-    }
+        }
+    }               
+    
 }
