@@ -21,7 +21,10 @@ pipeline{
         }  
         stage ('Quality gate'){
             steps{
-                bat "echo ver aula de instalaççao do sonar e configuração estática Pipeline 59"
+                sleep(5)
+                timeout(time: 1, Unit: 'MINUTES' ){
+                waitForQualityGate abortPipeline = true
+                }
             }
         }               
     }
