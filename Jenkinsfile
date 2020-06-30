@@ -21,7 +21,6 @@ pipeline{
         }  
         stage ('Quality gate'){
             steps{
-                sleep(1)
                 bat "echo ver aula de instalaçao do QUALITY GATE e configuração estática Pipeline 59"
                 }
             }
