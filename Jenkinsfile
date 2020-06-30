@@ -11,5 +11,18 @@ pipeline{
                 bat 'mvn test'
             }
         }
+        stage ('Sonar Analysis'){
+            environment{
+                scannerHome = tool 'SONAR_SCANNER'
+            } 
+            steps{
+                bat "echo ver aula de instalaççao do sonar e configuração estática Pipeline 58"
+            }
+        }  
+        stage ('Quality gate'){
+            steps{
+                bat "echo ver aula de instalaççao do sonar e configuração estática Pipeline 59"
+            }
+        }               
     }
 }
