@@ -44,7 +44,7 @@ pipeline{
             steps{
                 dir('frontensd'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'     
-                    bat 'mvn clear package'
+                    bat 'mvn clean package'
                     deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks', war: 'target/tasks.war'
                 }
             }
