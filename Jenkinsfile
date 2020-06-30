@@ -21,9 +21,8 @@ pipeline{
         }  
         stage ('Quality gate'){
             steps{
-                sleep(5)
-                timeout(time: 5, unit: 'SECONDS' ){
-                waitForQualityGate abortPipeline = false
+                sleep(1)
+                bat "echo ver aula de instalaçao do QUALITY GATE e configuração estática Pipeline 59"
                 }
             }
         }               
