@@ -1,10 +1,9 @@
 pipeline{
     agent any
     stages{
-
-        stage ('Um teste'){
+        stage ('Build Backend'){
             steps{
-                bat 'echo Teste'
+                bat 'mvn clean packege -DskipTests=true'
             }
         }   
     }
