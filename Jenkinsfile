@@ -1,12 +1,18 @@
-pipeline{
+TasksApplication{
     agent any
     stages{
-        stage ('Build Backend'){
+
+        stage ('Um teste'){
             steps{
-                bat 'mvn clean package -DskipTests=true'
+                bat 'Teste'
             }
-        }
-        stage ('Unit Tests'){
+        }   
+    }
+}
+
+
+
+/*        stage ('Unit Tests'){
             steps{
                 bat 'mvn test'
             }
@@ -16,7 +22,7 @@ pipeline{
                 scannerHome = tool 'SONAR_SCANNER'
             } 
             steps{
-                bat "echo ver aula de instalaçao do sonar e configuração estática Pipeline 58"
+                bat "echo ver aula de instalaççao do sonar e configuração estática Pipeline 58"
             }
         }  
         stage ('Quality gate'){
@@ -52,10 +58,32 @@ pipeline{
 
         stage ('Functional Tests'){
             steps{
-                bat 'echo Testes funcionais 2'
+                dir('functional-test'){
+                    git credentialsId ('github_login', 'https://github.com/edfcbz/tasks-functional-tests')
+                    bat 'mvn test'
+                }
+            }            
+        }
+
+        stage('Deploy Prod'){
+            steps{
+                bat 'docker-compose build'
+                bat 'docker-compose up -d'
             }
         }
-    }               
-    
-}
 
+        stage ('Health Check Prod'){
+            steps{
+                sleep(5) {
+                dir('functional-test'){
+                    bat 'mvn verify -Dskip.surefire.tests'
+                    }
+                }
+            }            
+        }
+    }
+    post{
+        junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml, api-test/target/surefire-reports/*.xml, functional-test/target/surefire-reports/*.xml, functional-test/target/failsafe-reports/*.xml'  
+    }    
+
+*/
