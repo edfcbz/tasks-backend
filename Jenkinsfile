@@ -1,4 +1,4 @@
-TasksApplication{
+pipeline{
     agent any
     stages{
 
