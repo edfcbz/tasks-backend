@@ -4,7 +4,7 @@ pipeline{
 
         stage ('Um teste'){
             steps{
-                bat 'Teste'
+                bat 'echo Teste'
             }
         }   
     }
