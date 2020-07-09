@@ -20,7 +20,14 @@ pipeline{
                     bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://192.168.99.100:9000 -Dsonar.login=30db8d152582d074103e10294ab19916daf8546e -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Application.java,**RootController.java"
                 }
             }
-        }                   
+        } 
+        stage ('Quality Gate'){
+            steps{
+                timeoutt( time: 1, unit: 'MINUTES' ){
+                    waitForQualityGate abortPipeline:true
+                }
+            }
+        }                           
     }
 }
 
