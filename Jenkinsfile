@@ -43,7 +43,14 @@ pipeline{
                     bat 'mvn test'
                 }
             }
-        }                        
+        } 
+
+        stage ('Deploy Frontend'){
+            steps{
+                deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks', war: 'target/tasks.war'
+            }
+        }         
+
     }
 }
 
