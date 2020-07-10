@@ -38,8 +38,10 @@ pipeline{
 
         stage('Pull and run API Tests Repository') {
             steps{
-                git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
-                bat 'mvn test'
+                dir('api-test'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
+                    bat 'mvn test'
+                }
             }
         }                        
     }
