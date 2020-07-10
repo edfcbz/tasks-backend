@@ -1,21 +1,21 @@
 pipeline{
     agent any
-   // stages{
-   //     stage ('Build Backend'){
-   //         steps{
-   //             bat 'mvn clean package -DskipTests=true'
-   //         }
-   //     }  
-
-        stage ('Backend: Pull, Build and Deploy'){
+    stages{
+        stage ('Backend: Build'){
             steps{
-                dir('backend'){
-                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-backend'
-                    bat 'mvn clean package -DskipTests=true'
-                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
-                }
+                bat 'mvn clean package -DskipTests=true'
             }
         }  
+
+   //     stage ('Backend: Pull, Build and Deploy'){
+   //         steps{
+   //             dir('backend'){
+   //                 git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-backend'
+   //                 bat 'mvn clean package -DskipTests=true'
+   //                 deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
+   //             }
+   //         }
+   //     }  
 
         stage ('Unit tests'){
             steps{
@@ -33,7 +33,7 @@ pipeline{
                 }
             }
         } 
-        
+
         stage ('Quality Gate'){
             steps{
                 sleep(5)
