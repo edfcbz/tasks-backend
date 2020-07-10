@@ -7,28 +7,22 @@ pipeline{
             }
         }  
 
-   //     stage ('Backend: Pull, Build and Deploy'){
-   //         steps{
-   //             dir('backend'){
-   //                 git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-backend'
-   //                 bat 'mvn clean package -DskipTests=true'
-   //                 deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
-   //             }
-   //         }
-   //     }  
 
-        stage ('Unit tests'){
+        stage ('Unit tests'){            
             steps{
                 bat 'mvn test'
             }
-                stage('Pull and run API Tests Repository') {
+        }
+     
+         stage('Pull and run API Tests Repository') {
             steps{
                 dir('api-test'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
                     bat 'mvn test'
                 }
             }
-        } } 
+        } 
+    
 
         stage ('Sonar Analysis'){
             environment{
@@ -83,7 +77,6 @@ pipeline{
                 }
             }
         } 
-
 
     }
 }
