@@ -1,16 +1,28 @@
 pipeline{
     agent any
-    stages{
-        stage ('Build Backend'){
+   // stages{
+   //     stage ('Build Backend'){
+   //         steps{
+   //             bat 'mvn clean package -DskipTests=true'
+   //         }
+   //     }  
+
+        stage ('Backend: Pull, Build and Deploy'){
             steps{
-                bat 'mvn clean package -DskipTests=true'
+                dir('backend'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-backend'
+                    bat 'mvn clean package -DskipTests=true'
+                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
+                }
             }
         }  
+
         stage ('Unit tests'){
             steps{
                 bat 'mvn test'
             }
         } 
+
         stage ('Sonar Analysis'){
             environment{
                 scannerHome = tool 'SONAR_SCANNER'
@@ -21,6 +33,7 @@ pipeline{
                 }
             }
         } 
+        
         stage ('Quality Gate'){
             steps{
                 sleep(5)
