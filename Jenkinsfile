@@ -62,6 +62,7 @@ pipeline{
             steps{
                 dir('functional-test'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
+                    bat 'mvn clean package'
                     bat 'mvn test'
                 }
             }
