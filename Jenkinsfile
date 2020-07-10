@@ -7,22 +7,11 @@ pipeline{
             }
         }  
 
-
         stage ('Unit tests'){            
             steps{
                 bat 'mvn test'
             }
         }
-     
-         stage('Pull and run API Tests Repository') {
-            steps{
-                dir('api-test'){
-                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
-                    bat 'mvn test'
-                }
-            }
-        } 
-    
 
         stage ('Sonar Analysis'){
             environment{
