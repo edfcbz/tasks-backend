@@ -28,7 +28,13 @@ pipeline{
                     waitForQualityGate abortPipeline: true
                 }
             }
-        }                           
+        } 
+
+        stage (Deploy Backend){
+            steps{
+                deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
+            }
+        }                          
     }
 }
 
