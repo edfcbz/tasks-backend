@@ -34,7 +34,14 @@ pipeline{
             steps{
                 deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
             }
-        }                          
+        } 
+
+        stage('Pull and run API Tests Repository') {
+            steps{
+                git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
+                bat 'mvn test'
+            }
+        }                        
     }
 }
 
