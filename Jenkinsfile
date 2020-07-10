@@ -45,7 +45,7 @@ pipeline{
             }
         } 
 
-        stage ('Deploy Frontend'){
+        stage ('Frontend: Pull, Build and Deploy'){
             steps{
                 dir('fontend'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
