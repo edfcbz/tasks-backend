@@ -90,6 +90,7 @@ pipeline{
         stage('Test: Running Funcional Test') {
             steps{
                 dir('functional-test'){
+                    sleep(5)
                     bat 'mvn test'
                 }
             }
@@ -97,19 +98,21 @@ pipeline{
 
         stage('Production: Building by docker-compose'){
             steps{
+                sleep(5)
                 bat 'docker-compose build'
             }
         }
 
         stage('Production: Starting environment by running docker-compose up '){
             steps{
+                sleep(5)
                 bat 'docker-compose up -d'
             }
         }        	
 
         stage('Production: Fontend Health Check') {
             steps{
-                sleep(9)
+                sleep(5)
                 dir('functional-test'){
                     bat 'mvn verify -Dskip.surefire.tests'
                 }
