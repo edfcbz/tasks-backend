@@ -7,13 +7,13 @@ pipeline{
             }
         }  
 
-        stage ('Test Environment: Runnung Unit tests'){            
+        stage ('Test Environment: Testing Backend by Unit tests'){            
             steps{
                 bat 'mvn test'
             }
         }
 
-        stage ('Test Environment: Sonar Analysis'){
+        stage ('Test Environment: Testing Backend code quality by Sonar Analysis'){
             environment{
                 scannerHome = tool 'SONAR_SCANNER'
             }
@@ -24,7 +24,7 @@ pipeline{
             }
         } 
 
-        stage ('Test Environment: Quality Gate'){
+        stage ('Test Environment: Testing Backend code quality by Quality Gate'){
             steps{
                 sleep(5)
                 timeout(time: 1, unit: 'MINUTES'){
@@ -41,21 +41,13 @@ pipeline{
 
         stage('Test Environment: Pull API Tests Repository') {
             steps{
-                stage ('Test Environment: Building Frontend, Build and Deploy'){
-            steps{
-                dir('frontend'){
-                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
-                    bat 'mvn clean package'
-                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks', war: 'target/tasks.war'
-                }
-            }
-        }         dir('api-test'){
+             dir('api-test'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
                 }
             }
         } 
 
-        stage('Test Environment: Running API Tests Repository') {
+        stage('Test Environment: Running API Tests') {
             steps{
                 dir('api-test'){
                     bat 'mvn test'
