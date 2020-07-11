@@ -72,7 +72,16 @@ pipeline{
                 bat 'docker-compose build'
                 bat 'docker-compose up -d'
             }
-        }		
+        }	
+
+        stage('Fontend Prod: Health Check') {
+            steps{
+                sleep(5)
+                dir('functional-test'){
+                    bat 'mvn verify'
+                }
+            }
+        }        	
 
     }
 }
