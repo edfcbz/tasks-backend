@@ -79,22 +79,14 @@ pipeline{
             }
         } 
 
-        stage('Test Environment: Pull Funcional Test repository') {
+        stage('Test Environment: Pull and running Funcional Test repository') {
             steps{
                 dir('functional-test'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
-                }
-            }
-        }
-
-        stage('Test Environment: Running Funcional Test') {
-            steps{
-                dir('functional-test'){
-                    sleep(8)
                     bat 'mvn test'
                 }
             }
-        }        
+        }
 
         stage('Production Environment: Building by docker-compose'){
             steps{
