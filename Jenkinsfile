@@ -58,14 +58,22 @@ pipeline{
             }
         }  
 
-        stage('Fontend: Functional Tests') {
+        stage('Funcional Test: Pull repository') {
             steps{
                 dir('functional-test'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
-                    bat 'mvn test'
                 }
             }
         }
+
+        stage('Funcional Test: running tests') {
+            steps{
+                dir('functional-test'){
+                    sleep(8)
+                    bat 'mvn test'
+                }
+            }
+        }        
 
         stage('Deploy Prod'){
             steps{
@@ -78,7 +86,7 @@ pipeline{
             steps{
                 sleep(5)
                 dir('functional-test'){
-                    bat 'mvn verify'
+                    bat 'mvn verify -Dskip.surefire.tests'
                 }
             }
         }        	
