@@ -1,19 +1,19 @@
 pipeline{
     agent any
     stages{
-        stage ('Backend: Build'){
+        stage ('Test Environment: Backend Building'){
             steps{
                 bat 'mvn clean package -DskipTests=true'
             }
         }  
 
-        stage ('Unit tests'){            
+        stage ('Test Environment: Runnung Unit tests'){            
             steps{
                 bat 'mvn test'
             }
         }
 
-        stage ('Sonar Analysis'){
+        stage ('Test Environment: Sonar Analysis'){
             environment{
                 scannerHome = tool 'SONAR_SCANNER'
             }
@@ -24,7 +24,7 @@ pipeline{
             }
         } 
 
-        stage ('Quality Gate'){
+        stage ('Test Environment: Quality Gate'){
             steps{
                 sleep(5)
                 timeout(time: 1, unit: 'MINUTES'){
@@ -33,22 +33,15 @@ pipeline{
             }
         } 
 
-        stage ('Backend: Deploy'){
+        stage ('Test Environment: Backend Deploy'){
             steps{
                 deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
             }
         } 
 
-        stage('Pull and run API Tests Repository') {
+        stage('Test Environment: Pull API Tests Repository') {
             steps{
-                dir('api-test'){
-                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
-                    bat 'mvn test'
-                }
-            }
-        } 
-
-        stage ('Frontend: Pull, Build and Deploy'){
+                stage ('Test Environment: Building Frontend, Build and Deploy'){
             steps{
                 dir('frontend'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
@@ -56,9 +49,45 @@ pipeline{
                     deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks', war: 'target/tasks.war'
                 }
             }
+        }         dir('api-test'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
+                }
+            }
+        } 
+
+        stage('Test Environment: Running API Tests Repository') {
+            steps{
+                dir('api-test'){
+                    bat 'mvn test'
+                }
+            }
+        } 
+
+        stage ('Test Environment: Pulling Frontend'){
+            steps{
+                dir('frontend'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
+                }
+            }
         }  
 
-        stage('Funcional Test: Pull repository') {
+        stage ('Test Environment: Building Frontend'){
+            steps{
+                dir('frontend'){
+                    bat 'mvn clean package'
+                }
+            }
+        } 
+
+        stage ('Test Environment: Deploying Frontend'){
+            steps{
+                dir('frontend'){
+                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks', war: 'target/tasks.war'
+                }
+            }
+        } 
+
+        stage('Test Environment: Pull Funcional Test repository') {
             steps{
                 dir('functional-test'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
@@ -66,7 +95,7 @@ pipeline{
             }
         }
 
-        stage('Funcional Test: running tests') {
+        stage('Test Environment: Running Funcional Test') {
             steps{
                 dir('functional-test'){
                     sleep(8)
@@ -75,16 +104,21 @@ pipeline{
             }
         }        
 
-        stage('Deploy Prod'){
+        stage('Production Environment: Building by docker-compose'){
             steps{
                 bat 'docker-compose build'
+            }
+        }
+
+        stage('Production Environment: running docker-compose up '){
+            steps{
                 bat 'docker-compose up -d'
             }
-        }	
+        }        	
 
-        stage('Fontend Prod: Health Check') {
+        stage('Production Environment: Fontend Health Check') {
             steps{
-                sleep(5)
+                sleep(10)
                 dir('functional-test'){
                     bat 'mvn verify -Dskip.surefire.tests'
                 }
