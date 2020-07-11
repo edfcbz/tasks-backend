@@ -102,7 +102,7 @@ pipeline{
 
         stage('Production Environment: Fontend Health Check') {
             steps{
-                sleep(10)
+                sleep(9)
                 dir('functional-test'){
                     bat 'mvn verify -Dskip.surefire.tests'
                 }
