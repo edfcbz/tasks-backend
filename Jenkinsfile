@@ -24,10 +24,8 @@ pipeline{
 
         stage('Test: Creating and running Environment by docker-compose'){
             steps{
-                dir('devops'){
                     bat 'docker-compose build'
                     bat 'docker-compose up -d'
-                }
             }
         }
 
