@@ -38,7 +38,7 @@ services:
         build:
             context: .
             args:
-                - WAR_FILE=target/tasks.war
+                - WAR_FILE=tasks-frontend/target/tasks.war
                 - CONTEXT=tasks
         networks:
             - test_net_front

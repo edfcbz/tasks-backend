@@ -22,6 +22,15 @@ pipeline{
             }       
         }
 
+        stage ('Test: Pulling abd building Frontend'){
+            steps{
+                dir('frontend'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
+                    bat 'mvn package'
+                }
+            }
+        } 
+
         stage('Test: Creating and running Environment by docker-compose'){
             steps{
                     bat 'docker-compose build'
@@ -79,13 +88,7 @@ pipeline{
         //    }
         //} 
 
-        //stage ('Test: Pulling Frontend'){
-        //    steps{
-        //        dir('frontend'){
-        //            git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
-        //        }
-        //    }
-        //}  
+ 
 
         //stage ('Test: Building Frontend'){
         //    steps{
