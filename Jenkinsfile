@@ -2,19 +2,19 @@ pipeline{
     agent any
     stages{
         stage ('Test: Backend Building'){
-            dir('backend-test'){
-                steps{
+            steps{
+                dir('backend-test'){
                     bat 'mvn clean package -DskipTests=true'
                 }
             }
         }  
 
         stage ('Test: Testing Backend by Unit tests'){   
-            dir('backend_test'){
-                steps{
+            steps{
+                dir('backend-test'){
                     bat 'mvn test'
                 }
-            }         
+            }       
         }
 
         stage ('Test: Testing Backend code quality by Sonar Analysis'){
