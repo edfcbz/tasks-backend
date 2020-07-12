@@ -50,9 +50,20 @@ pipeline{
             }
         } 
 
+
+        stage('Testg: Creating and running Environment by docker-compose'){
+            steps{
+                dir('docker-test'){
+                    bat 'docker-compose build'
+                    bat 'docker-compose up -d'
+                }
+            }
+        }
+
         stage ('Test: Backend Deploy'){
             steps{
                 dir('backend-test'){
+                    sleep(30)
                     deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8002')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
                 }
             }
