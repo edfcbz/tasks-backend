@@ -28,7 +28,7 @@ pipeline{
 
         stage('Test: Pull configurations docker repository test') {
             steps{
-             dir('devops'){
+             dir('Pipeline'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/devops'
                 }
             }
