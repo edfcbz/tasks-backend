@@ -16,30 +16,20 @@ pipeline{
             }
         }  
 
-        //stage ('Test: Testing Backend by Unit tests'){   
-        //    steps{
-        //        dir('backend-test'){
-        //            bat 'mvn test'
-        //        }
-        //    }       
-        //}
+        stage ('Test: Testing Backend by Unit tests'){   
+            steps{
+                bat 'mvn test'
+            }       
+        }
 
-        //stage('Test: Pull configurations docker repository test') {
-        //    steps{
-        //     dir('devops'){
-        //            git credentialsId: 'github_login', url: 'https://github.com/edfcbz/devops'
-        //        }
-        //    }
-        //} 
-
-        //stage('Test: Creating and running Environment by docker-compose'){
-        //    steps{
-        //        dir('devops'){
-        //            bat 'docker-compose build'
-        //            bat 'docker-compose up -d'
-        //        }
-        //    }
-        //}
+        stage('Test: Creating and running Environment by docker-compose'){
+            steps{
+                dir('devops'){
+                    bat 'docker-compose build'
+                    bat 'docker-compose up -d'
+                }
+            }
+        }
 
         //stage ('Test: Testing Backend code quality by Sonar Analysis'){
         //    environment{
