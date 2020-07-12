@@ -1,6 +1,15 @@
 pipeline{
     agent any
     stages{
+
+        stage('Test: Pull Backend Repository') {
+            steps{
+             dir('backend-test'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-backend'
+                }
+            }
+        } 
+
         stage ('Test: Backend Building'){
             steps{
                 dir('backend-test'){
