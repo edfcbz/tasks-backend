@@ -2,14 +2,6 @@ pipeline{
     agent any
     stages{
 
-        stage ('Test: EFC'){   
-            steps{
-                dir('backend-test'){
-                    bat 'echo EFC'
-                }
-            }       
-        }        
-
         stage('Test: Pull Backend Repository') {
             steps{
              dir('backend-test'){
@@ -58,10 +50,9 @@ pipeline{
             }
         } 
 
-
         stage('Testg: Creating and running Environment by docker-compose'){
             steps{
-                dir('docker-test'){
+                dir('backend-test'){
                     bat 'docker-compose build'
                     bat 'docker-compose up -d'
                 }
