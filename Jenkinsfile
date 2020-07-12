@@ -24,7 +24,7 @@ pipeline{
 
         stage ('Test: Pulling and building Frontend'){
             steps{
-                dir('frontend'){
+                dir('tasks-frontend'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
                     bat 'mvn package'
                 }
