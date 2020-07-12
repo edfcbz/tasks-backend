@@ -2,6 +2,14 @@ pipeline{
     agent any
     stages{
 
+        stage('Test: Pull configurations docker repository test') {
+            steps{
+             dir('Pipeline'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/devops'
+                }
+            }
+        } 
+        
         stage('Test: Pull Backend Repository') {
             steps{
              dir('backend-test'){
@@ -26,17 +34,10 @@ pipeline{
             }       
         }
 
-        stage('Test: Pull configurations docker repository test') {
-            steps{
-             dir('Pipeline'){
-                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/devops'
-                }
-            }
-        } 
 
         stage('Test: Creating and running Environment by docker-compose'){
             steps{
-                dir('devops'){
+                dir('Pipeline'){
                     bat 'docker-compose build'
                     bat 'docker-compose up -d'
                 }
