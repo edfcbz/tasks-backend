@@ -26,9 +26,17 @@ pipeline{
             }       
         }
 
+        stage('Test: Pull configurations docker repository test') {
+            steps{
+             dir('devops'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/devops'
+                }
+            }
+        } 
+
         stage('Test: Creating and running Environment by docker-compose'){
             steps{
-                dir('backend-test'){
+                dir('devops'){
                     bat 'docker-compose build'
                     bat 'docker-compose up -d'
                 }
@@ -40,6 +48,7 @@ pipeline{
                 scannerHome = tool 'SONAR_SCANNER'
             }
             steps{
+                sleep(30)
                 dir('backend-test'){
                     withSonarQubeEnv('SONAR_LOCAL'){
                         bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://192.168.99.100:9000 -Dsonar.login=30db8d152582d074103e10294ab19916daf8546e -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Application.java,**RootController.java"
@@ -62,7 +71,6 @@ pipeline{
         stage ('Test: Backend Deploy'){
             steps{
                 dir('backend-test'){
-                    sleep(30)
                     deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8002')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
                 }
             }
