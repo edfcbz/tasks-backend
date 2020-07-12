@@ -2,6 +2,14 @@ pipeline{
     agent any
     stages{
 
+        stage ('Test: EFC'){   
+            steps{
+                dir('backend-test'){
+                    bat 'echo EFC'
+                }
+            }       
+        }        
+
         stage('Test: Pull Backend Repository') {
             steps{
              dir('backend-test'){
