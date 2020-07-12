@@ -22,7 +22,7 @@ pipeline{
             }       
         }
 
-        stage ('Test: Pulling abd building Frontend'){
+        stage ('Test: Pulling and building Frontend'){
             steps{
                 dir('frontend'){
                     git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-frontend'
