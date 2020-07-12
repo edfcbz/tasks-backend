@@ -35,7 +35,7 @@ pipeline{
 
         stage ('Test: Backend Deploy'){
             steps{
-                deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
+                deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8002')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
             }
         } 
 
@@ -74,7 +74,7 @@ pipeline{
         stage ('Test: Deploying Frontend'){
             steps{
                 dir('frontend'){
-                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks', war: 'target/tasks.war'
+                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8001')], contextPath: 'tasks', war: 'target/tasks.war'
                 }
             }
         } 
