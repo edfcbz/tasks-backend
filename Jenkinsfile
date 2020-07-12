@@ -26,6 +26,15 @@ pipeline{
             }       
         }
 
+        stage('Test: Creating and running Environment by docker-compose'){
+            steps{
+                dir('backend-test'){
+                    bat 'docker-compose build'
+                    bat 'docker-compose up -d'
+                }
+            }
+        }
+
         stage ('Test: Testing Backend code quality by Sonar Analysis'){
             environment{
                 scannerHome = tool 'SONAR_SCANNER'
@@ -49,15 +58,6 @@ pipeline{
                 }
             }
         } 
-
-        stage('Testg: Creating and running Environment by docker-compose'){
-            steps{
-                dir('backend-test'){
-                    bat 'docker-compose build'
-                    bat 'docker-compose up -d'
-                }
-            }
-        }
 
         stage ('Test: Backend Deploy'){
             steps{
