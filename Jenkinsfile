@@ -35,18 +35,36 @@ pipeline{
                 scannerHome = tool 'SONAR_SCANNER'
             }
             steps{
-                //sleep(30)
                 withSonarQubeEnv('SONAR_LOCAL'){
                     bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://192.168.99.100:9000 -Dsonar.login=09d7564c765c3ed85381b23df391613cce09dfc9 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Application.java,**RootController.java"
                 }
             }
         } 
 
-        stage ('Test Environment: Backend Deploy'){
+        //ESTE STAGE NÃO É NECESSÁRIO, POIS AO EXECUTAR O "DOCKER-COMPOSE UP" DO AMBIENTE DE TESTES, NESTE SÃO INSTANCIADAS IMAGENS DO TOMCAT DE FROTEND E BACKEND COM OS .WAR CORRESPONDENTES
+        //ESTANDO ASSIM OS CONTAINNERS DISPONÍVEIS NO ENDEREÇO 192.168.99.100:8001 E 192.168.99.100:8002 (FRONTEND E BACKEND RESPECTIVAMENTE)
+        //stage ('Test Environment: Backend Deploy'){
+        //    steps{
+        //        deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
+        //    }
+        //} 
+
+        stage('Test Environment: Pull API Tests Repository') {
             steps{
-                deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.0.105:8001')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
+             dir('api-test'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
+                }
             }
         } 
+
+        stage('Test Environment: Running API Tests') {
+            steps{
+                dir('api-test'){
+                    bat 'mvn test'
+                }
+            }
+        } 
+
 
 
     }
