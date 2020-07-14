@@ -65,21 +65,33 @@ pipeline{
             }
         } 
 
-        stage ('Test: Building Frontend'){
-            steps{
-                dir('tasks-frontend'){
-                    bat 'mvn clean package'
-                }
-            }
-        } 
+        //NÃO É NECESSÁRIO REALIZAR DEPLOY DO FRONT END POIS A IMAGEM CRIADA NO DOCKER-COMPOSE QUE "SOBE" O AMBIENTE DE TESTE, JÁ FOI "STARTADA" COM O FRONT END DENTRO DELA.
+        //stage ('Test: Deploying Frontend'){
+        //    steps{
+        //        dir('tasks-frontend'){
+        //            deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8001')], contextPath: 'tasks', war: 'target/tasks.war'
+        //        }
+        //    }
+        //} 
 
-        stage ('Test: Deploying Frontend'){
+        stage('Test Environment: Pull Funcional Test repository') {
             steps{
-                dir('tasks-frontend'){
-                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8001')], contextPath: 'tasks', war: 'target/tasks.war'
+                dir('functional-test'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
                 }
             }
-        } 
+        }
+
+        stage('Test Environment: Running Funcional Test') {
+            steps{
+                dir('functional-test'){
+                    sleep(5)
+                    bat 'mvn test'
+                }
+            }
+        }        
+
+
 
     }
 }
