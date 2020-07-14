@@ -23,12 +23,19 @@ pipeline{
             }
         } 
 
-        stage('Test Environment: Creating and running by docker-compose'){
+        stage ('Test Environment: Copying tasks.war and tasks-backend.war to Production Environment'){   
             steps{
-                    bat 'docker-compose build'
-                    bat 'docker-compose up -d'
-            }
+                bat 'copy target/tasks-backend.war prodution-war'
+                bat 'copy tasks-frontend/target/tasks.war prodution-war'
+            }       
         }
+
+        //stage('Test Environment: Creating and running by docker-compose'){
+        //    steps{
+        //            bat 'docker-compose build'
+        //            bat 'docker-compose up -d'
+        //    }
+        //}
 
         //stage ('Test Environment: Testing Backend quality code by Sonar Analysis'){
         //    environment{
@@ -49,21 +56,21 @@ pipeline{
         //    }
         //} 
 
-        stage('Test Environment: Pull API Tests Repository') {
-            steps{
-             dir('api-test'){
-                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
-                }
-            }
-        } 
+        //stage('Test Environment: Pull API Tests Repository') {
+        //    steps{
+        //     dir('api-test'){
+        //            git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
+        //        }
+        //    }
+        //} 
 
-        stage('Test Environment: Running API Tests') {
-            steps{
-                dir('api-test'){
-                    bat 'mvn test'
-                }
-            }
-        } 
+        //stage('Test Environment: Running API Tests') {
+        //    steps{
+        //        dir('api-test'){
+        //            bat 'mvn test'
+        //        }
+        //    }
+        //} 
 
         //NÃO É NECESSÁRIO REALIZAR DEPLOY DO FRONT END POIS A IMAGEM CRIADA NO DOCKER-COMPOSE QUE "SOBE" O AMBIENTE DE TESTE, JÁ FOI "STARTADA" COM O FRONT END DENTRO DELA.
         //stage ('Test: Deploying Frontend'){
@@ -74,24 +81,44 @@ pipeline{
         //    }
         //} 
 
-        stage('Test Environment: Pull Funcional Test repository') {
-            steps{
-                dir('functional-test'){
-                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
-                }
-            }
-        }
+        //stage('Test Environment: Pull Funcional Test repository') {
+        //    steps{
+        //        dir('functional-test'){
+        //            git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
+        //        }
+        //    }
+        //}
 
-        stage('Test Environment: Running Funcional Test') {
-            steps{
-                dir('functional-test'){
-                    sleep(5)
-                    bat 'mvn test'
-                }
-            }
-        }        
+        //stage('Test Environment: Running Funcional Test') {
+        //    steps{
+        //        dir('functional-test'){
+        //            sleep(5)
+        //            bat 'mvn test'
+        //        }
+        //    }
+        //}        
 
+        //stage('Production Environment: Building by docker-compose'){
+        //    steps{
+        //        bat 'docker-compose build'
+        //    }
+        //}
 
+        //stage('Production Environment: Starting environment by running docker-compose up '){
+        //    steps{
+        //        sleep(5)
+        //        bat 'docker-compose up -d'
+        //    }
+        //}        	
+
+        //stage('Production Environment: Fontend Health Check') {
+        //    steps{
+        //        sleep(5)
+        //        dir('functional-test'){
+        //            bat 'mvn verify -Dskip.surefire.tests'
+        //        }
+        //    }
+        //}
 
     }
 }
