@@ -9,6 +9,8 @@ services:
         environment:
             - POSTGRES_PASSWORD=passwd
             - POSTGRES_DB=tasks
+        ports:
+            - 5410:5432            
 
     backend:
         container_name: backend-test
@@ -72,6 +74,8 @@ services:
     postgres-sonar:
         container_name: postgres-sonar
         image: postgres:9.6
+        ports:
+            - 5411:5432
         networks:
             - sonarnet
         environment:
