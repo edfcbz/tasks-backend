@@ -38,23 +38,23 @@ pipeline{
             }       
         }
 
-        //stage('Test Environment: Creating and running by docker-compose'){
-        //    steps{
-        //            bat 'docker-compose build'
-        //            bat 'docker-compose up -d'
-        //    }
-        //}
+        stage('Test Environment: Creating and running by docker-compose'){
+            steps{
+                    bat 'docker-compose build'
+                    bat 'docker-compose up -d'
+            }
+        }
 
-        //stage ('Test Environment: Testing Backend quality code by Sonar Analysis'){
-        //    environment{
-        //        scannerHome = tool 'SONAR_SCANNER'
-        //    }
-        //    steps{
-        //        withSonarQubeEnv('SONAR_LOCAL'){
-        //            bat "${scannerHome}/bin/sonar-scanner -X -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://192.168.99.100:9000 -Dsonar.login=09d7564c765c3ed85381b23df391613cce09dfc9 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Application.java,**RootController.java"
-        //        }
-        //    }
-        //} 
+        stage ('Test Environment: Testing Backend quality code by Sonar Analysis'){
+            environment{
+                scannerHome = tool 'SONAR_SCANNER'
+            }
+            steps{
+                withSonarQubeEnv('SONAR_LOCAL'){
+                    bat "${scannerHome}/bin/sonar-scanner -X -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://192.168.99.100:9000 -Dsonar.login=09d7564c765c3ed85381b23df391613cce09dfc9 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Application.java,**RootController.java"
+                }
+            }
+        } 
 
         //ESTE STAGE NÃO É NECESSÁRIO, POIS AO EXECUTAR O "DOCKER-COMPOSE UP" DO AMBIENTE DE TESTES, NESTE SÃO INSTANCIADAS IMAGENS DO TOMCAT DE FROTEND E BACKEND COM OS .WAR CORRESPONDENTES
         //ESTANDO ASSIM OS CONTAINNERS DISPONÍVEIS NO ENDEREÇO 192.168.99.100:8001 E 192.168.99.100:8002 (FRONTEND E BACKEND RESPECTIVAMENTE)
@@ -64,21 +64,21 @@ pipeline{
         //    }
         //} 
 
-        //stage('Test Environment: Pull API Tests Repository') {
-        //    steps{
-        //     dir('api-test'){
-        //            git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
-        //        }
-        //    }
-        //} 
+        stage('Test Environment: Pull API Tests Repository') {
+            steps{
+             dir('api-test'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-api-test'
+                }
+            }
+        } 
 
-        //stage('Test Environment: Running API Tests') {
-        //    steps{
-        //        dir('api-test'){
-        //            bat 'mvn test'
-        //        }
-        //    }
-        //} 
+        stage('Test Environment: Running API Tests') {
+            steps{
+                dir('api-test'){
+                    bat 'mvn test'
+                }
+            }
+        } 
 
         //NÃO É NECESSÁRIO REALIZAR DEPLOY DO FRONT END POIS A IMAGEM CRIADA NO DOCKER-COMPOSE QUE "SOBE" O AMBIENTE DE TESTE, JÁ FOI "STARTADA" COM O FRONT END DENTRO DELA.
         //stage ('Test: Deploying Frontend'){
@@ -89,44 +89,47 @@ pipeline{
         //    }
         //} 
 
-        //stage('Test Environment: Pull Funcional Test repository') {
-        //    steps{
-        //        dir('functional-test'){
-        //            git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
-        //        }
-        //    }
-        //}
+        stage('Test Environment: Pull Funcional Test repository') {
+            steps{
+                dir('functional-test'){
+                    git credentialsId: 'github_login', url: 'https://github.com/edfcbz/tasks-functional-test'
+                }
+            }
+        }
 
-        //stage('Test Environment: Running Funcional Test') {
-        //    steps{
-        //        dir('functional-test'){
-        //            sleep(5)
-        //            bat 'mvn test'
-        //        }
-        //    }
-        //}        
+        stage('Test Environment: Running Funcional Test') {
+            steps{
+                dir('functional-test'){
+                    sleep(5)
+                    bat 'mvn test'
+                }
+            }
+        }        
 
-        //stage('Production Environment: Building by docker-compose'){
-        //    steps{
-        //        bat 'docker-compose build'
-        //    }
-        //}
+        stage('Production Environment: Building by docker-compose'){
+            steps{
+                dir('tasks-devops'){
+                    bat 'docker-compose build'
+                }
+            }
+        }
 
-        //stage('Production Environment: Starting environment by running docker-compose up '){
-        //    steps{
-        //        sleep(5)
-        //        bat 'docker-compose up -d'
-        //    }
-        //}        	
+        stage('Production Environment: Starting environment by running docker-compose up '){
+            steps{
+                dir('tasks-devops'){
+                    bat 'docker-compose up -d'
+                }
+            }
+        }        	
 
-        //stage('Production Environment: Fontend Health Check') {
-        //    steps{
-        //        sleep(5)
-        //        dir('functional-test'){
-        //            bat 'mvn verify -Dskip.surefire.tests'
-        //        }
-        //    }
-        //}
+        stage('Production Environment: Fontend Health Check') {
+            steps{
+                sleep(5)
+                dir('functional-test'){
+                    bat 'mvn verify -Dskip.surefire.tests'
+                }
+            }
+        }
 
     }
 }
