@@ -100,7 +100,7 @@ pipeline{
         stage('Test Environment: Running Funcional Test') {
             steps{
                 dir('functional-test'){
-                    sleep(5)
+                    sleep(10)
                     bat 'mvn test'
                 }
             }
