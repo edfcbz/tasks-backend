@@ -67,7 +67,7 @@ pipeline{
 
         stage ('Test: Building Frontend'){
             steps{
-                dir('frontend'){
+                dir('tasks-frontend'){
                     bat 'mvn clean package'
                 }
             }
@@ -75,7 +75,7 @@ pipeline{
 
         stage ('Test: Deploying Frontend'){
             steps{
-                dir('frontend'){
+                dir('tasks-frontend'){
                     deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://192.168.99.100:8001')], contextPath: 'tasks', war: 'target/tasks.war'
                 }
             }
