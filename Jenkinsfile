@@ -106,21 +106,14 @@ pipeline{
             }
         }        
 
-        stage('Production Environment: Building by docker-compose'){
+        stage('Production Environment: Creating and running by docker-compose'){
             steps{
                 dir('tasks-devops'){
                     bat 'docker-compose build'
-                }
-            }
-        }
-
-        stage('Production Environment: Starting environment by running docker-compose up '){
-            steps{
-                dir('tasks-devops'){
                     bat 'docker-compose up -d'
                 }
             }
-        }        	
+        }
 
         //stage('Production Environment: Fontend Health Check') {
         //    steps{
