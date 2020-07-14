@@ -25,7 +25,7 @@ pipeline{
 
         stage ('Test Environment: Copying tasks.war and tasks-backend.war to Production Environment'){   
             steps{
-                bat 'copy C:/Users/Eduardo/.jenkins/workspace/Pipeline/target/tasks-backend.war C:/Users/Eduardo/.jenkins/workspace/Pipeline/prodution-war /y'
+                bat 'copy C:\Users\Eduardo\.jenkins\workspace\Pipeline\target\tasks-backend.war C:\Users\Eduardo\.jenkins\workspace\Pipeline\prodution-war /y'
                 //bat 'copy C:/Users/Eduardo/.jenkins/workspace/Pipeline/tasks-frontend/target/tasks.war C:/Users/Eduardo/.jenkins/workspace/Pipeline/prodution-war /y'
             }       
         }
