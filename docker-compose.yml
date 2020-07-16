@@ -56,8 +56,8 @@ services:
         image: sonarqube:7.9.2-community
         ports:
             - "9000:9000"
-        networks:
-            - sonarnet
+        #networks:
+        #    - sonarnet
         environment:
             - sonar.jdbc.url=jdbc:postgresql://postgres-sonar:5432/sonar
         depends_on:
@@ -72,8 +72,8 @@ services:
     postgres-sonar:
         container_name: postgres-sonar
         image: postgres:9.6
-        networks:
-            - sonarnet
+        #networks:
+        #    - sonarnet
         environment:
             - POSTGRES_USER=sonar
             - POSTGRES_PASSWORD=sonar
@@ -84,16 +84,16 @@ services:
     selenium-hub:
         image: selenium/hub:3.141.59-zinc
         container_name: selenium-hub
-        networks:
-            - seleniumGrid
+        #networks:
+        #    - seleniumGrid
         ports:
             - "4444:4444"
 
     chrome-slave1:
         image: selenium/node-chrome:3.141.59-zinc
         container_name: chrome-slave1
-        networks:
-            - seleniumGrid
+        #networks:
+        #    - seleniumGrid
         depends_on:
             - selenium-hub
         environment:
@@ -105,8 +105,8 @@ services:
     chrome-slave2:
         image: selenium/node-chrome:3.141.59-zinc
         container_name: chrome-slave2
-        networks:
-            - seleniumGrid
+        #networks:
+        #    - seleniumGrid
         depends_on:
             - selenium-hub
         environment:
