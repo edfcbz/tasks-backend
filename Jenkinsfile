@@ -38,21 +38,21 @@ pipeline{
             }       
         }
 
-        stage('Production Environment: Creating and running by docker-compose'){
-            steps{
-                dir('tasks-devops'){
-                    bat 'docker-compose build'
-                    bat 'docker-compose up -d'
-                }
-            }
-        }
+        //stage('Production Environment: Creating and running by docker-compose'){
+        //    steps{
+        //        dir('tasks-devops'){
+        //            bat 'docker-compose build'
+        //            bat 'docker-compose up -d'
+        //        }
+        //    }
+        //}
 
-        stage('Test Environment: Creating and running by docker-compose'){
-            steps{
-                    bat 'docker-compose build'
-                    bat 'docker-compose up -d'
-            }
-        }
+        //stage('Test Environment: Creating and running by docker-compose'){
+        //    steps{
+        //            bat 'docker-compose build'
+        //            bat 'docker-compose up -d'
+        //    }
+        //}
 
         //stage ('Test Environment: Testing Backend quality code by Sonar Analysis'){
         //    environment{
@@ -115,23 +115,23 @@ pipeline{
             }
         }        
 
-        //stage('Production Environment: Creating and running by docker-compose'){
-        //    steps{
-        //        dir('tasks-devops'){
-        //            bat 'docker-compose build'
-        //            bat 'docker-compose up -d'
-        //        }
-        //    }
-        //}
+        stage('Production Environment: Creating and running by docker-compose'){
+            steps{
+                dir('tasks-devops'){
+                    bat 'docker-compose build'
+                    bat 'docker-compose up -d'
+                }
+            }
+        }
 
-        //stage('Production Environment: Fontend Health Check') {
-        //    steps{
-        //        sleep(5)
-        //        dir('functional-test'){
-        //            bat 'mvn verify -Dskip.surefire.tests'
-        //        }
-        //    }
-        //}
+        stage('Production Environment: Fontend Health Check') {
+            steps{
+                sleep(5)
+                dir('functional-test'){
+                    bat 'mvn verify -Dskip.surefire.tests'
+                }
+            }
+        }
 
     }
 }
